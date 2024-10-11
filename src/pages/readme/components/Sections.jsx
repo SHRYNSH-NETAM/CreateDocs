@@ -1,17 +1,9 @@
-import { React,useState,useMemo,useEffect } from 'react';
+import { React,useState,useEffect } from 'react';
 import { useStore } from '../store';
 
 const Sections = () => {
   const [showModal, setShowModal] = useState(false);
   const [inputSection,setInputSection] = useState("");
-
-  useEffect(() => {
-    if (activeSections && activeSections.length > 0) {
-        toggleSelectedSection(activeSections[0].slug);
-    } else {
-        toggleSelectedSection(''); // Handled case when no sections are available
-    }
-  }, []);
 
   const activeSections = useStore(
     (state) => state.ActiveSections
@@ -25,25 +17,73 @@ const Sections = () => {
     (state) => state.MovetoActive
   );
 
+  const moveToInactive = useStore(
+    (state) => state.MovetoInactive
+  );
+
   const addNewSection = useStore(
     (state) => state.addNewSection
   );
 
   const handleAddSection = () => {
-    setShowModal(false)
+    if (!inputSection) {
+      alert("Please Enter a valid name!!");
+      return;
+    }
+    
+    const sectionExists = activeSections.some((section) => section.name === inputSection) || 
+                          inactiveSections.some((section) => section.name === inputSection);
+    
+    if (sectionExists) {
+      alert("Section with same Name already exists. Please use a Different Name");
+      return;
+    }
+
+    setShowModal(false);
     addNewSection(inputSection, inputSection);
-  };
+};
+
+  const SelectedSection = useStore(
+    (state) => state.SelectedSection
+  );
 
   const toggleSelectedSection = useStore(
     (state) => state.toggleSelectedSelection
   );
+
+  const resetSelectedSection = useStore(
+    (state) => state.ResetSelectedSection
+  );
+
+  const resetStore = useStore((state) => state.resetStore);
+
+  function handleReset() {
+    if (confirm("All sections of your readme will be removed; to continue, click OK")) {
+      resetStore();
+      location.reload(true);
+    }
+  }
+
+  function handleSectionReset(slug,name) {
+    if (confirm("All Content of this Section will Reset; to continue, click OK")) {
+      resetSelectedSection(slug,name);
+    }
+  }
+
+  useEffect(() => {
+    if (activeSections && activeSections.length > 0) {
+        toggleSelectedSection(activeSections[activeSections.length-1].slug);
+    } else {
+        toggleSelectedSection('');
+    }
+  }, []);
 
   return (
     <>
       <div className="grid grid-cols-[15%_auto] sm:grid-cols-[8%_auto] xl:grid-rows-[20px_auto] xl:grid-cols-none">
         <div className="p-1 px-3 flex justify-between text-zinc-700 font-semibold">
           <div>Sections</div>
-          <div className="flex justify-center">
+          <div className="flex justify-center" role="button" onClick={handleReset}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
@@ -70,10 +110,28 @@ const Sections = () => {
                 <div
                   key={index}
                   role="button"
-                  onClick={()=>{toggleSelectedSection(section.slug)}}
-                  className="text-slate-800 flex w-full items-center p-3 transition-all bg-white hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100 rounded-md shadow"
+                  onClick={() => toggleSelectedSection(section.slug)}
+                  className={`text-slate-800 flex w-full items-center justify-between p-3 transition-all bg-white hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100 rounded-md shadow border-2
+                    ${SelectedSection.slug === section.slug ? 'border-zinc-500' : ''}`}
                 >
                   {section.name}
+                  { SelectedSection.slug === section.slug
+                    ?
+                    <div className="flex gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-5"
+                        onClick={()=>{handleSectionReset(section.slug,section.name)}}>
+                        <path fillRule="evenodd" d="M13.836 2.477a.75.75 0 0 1 .75.75v3.182a.75.75 0 0 1-.75.75h-3.182a.75.75 0 0 1 0-1.5h1.37l-.84-.841a4.5 4.5 0 0 0-7.08.932.75.75 0 0 1-1.3-.75 6 6 0 0 1 9.44-1.242l.842.84V3.227a.75.75 0 0 1 .75-.75Zm-.911 7.5A.75.75 0 0 1 13.199 11a6 6 0 0 1-9.44 1.241l-.84-.84v1.371a.75.75 0 0 1-1.5 0V9.591a.75.75 0 0 1 .75-.75H5.35a.75.75 0 0 1 0 1.5H3.98l.841.841a4.5 4.5 0 0 0 7.08-.932.75.75 0 0 1 1.025-.273Z" clipRule="evenodd"/>
+                      </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5"
+                        onClick={()=>{
+                          moveToInactive(section.slug);
+                          toggleSelectedSection('');
+                          }}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                      </svg>
+                    </div>
+                    :
+                    <></>}
                 </div>
               ))}
             </nav>

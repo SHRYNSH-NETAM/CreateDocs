@@ -1,35 +1,11 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { defaultActiveSections, defaultInactiveSections } from './components/defaultSections';
 
 const store = (set) => ({
 
-    ActiveSections: [
-        {
-        slug: 'title-and-description',
-        name: 'Title and Description',
-        markdown: `
-# Project Title
-
-A brief description of what this project does and who it's for
-        `,
-        },
-    ],
-
-    InactiveSections: [
-        {
-        slug: 'installation',
-        name: 'Installation',
-        markdown: `
-## Installation
-
-Install my-project with npm
-
-\`\`\`bash
-    npm install my-project
-    cd my-project
-\`\`\`
-        `,
-        },
-    ],
+    ActiveSections: defaultActiveSections,
+    InactiveSections: defaultInactiveSections,
 
     MovetoActive: (slug) =>
         set((state) => {
@@ -92,7 +68,13 @@ Install my-project with npm
     toggleSelectedSelection: (slug) =>
         set((state) => {
             if(slug === '') {
-                return { SelectedSection: state.SelectedSection }; // No change if slug is empty
+                return { 
+                SelectedSection: {
+                    slug: '',
+                    name: '',
+                    markdown: ``,
+                }, 
+            }; // Make it empty if No Section is in Active Section
             }
             const foundSection = state.ActiveSections.find(section => section.slug === slug);
             return foundSection
@@ -115,6 +97,56 @@ Install my-project with npm
                 SelectedSection: { ...updatedSelectedSection }, // Update the SelectedSection with new markdown
             };
     }),
+
+    ResetSelectedSection: (slug, name) =>
+        set((state) => {
+            // Step 1: Find the section in defaultInactiveSections
+            let resetSection = defaultInactiveSections.find((section) => section.slug === slug);
+    
+            // Step 2: If not found, try to find it in defaultActiveSections
+            if (!resetSection) {
+                resetSection = defaultActiveSections.find((section) => section.slug === slug);
+            }
+    
+            // Step 3: If still not found, create a new section object
+            if (!resetSection) {
+                resetSection = {
+                    slug: slug,
+                    name: name,
+                    markdown: ``,
+                };
+            } else {
+                // Step 4: If found, make a copy of the section
+                resetSection = { ...resetSection };
+            }
+    
+            // Step 5: Update ActiveSections by replacing the section with the same slug
+            const updatedActiveSections = state.ActiveSections.map((section) => 
+                section.slug === slug ? resetSection : section
+            );
+    
+            return {
+                ActiveSections: updatedActiveSections, // Step 6: Update the ActiveSections array with the resetSection
+                SelectedSection: resetSection, // Step 7: Update SelectedSection with the resetSection
+            };
+    }),
+    
+    resetStore: () => {
+        set({
+            ActiveSections: defaultActiveSections,
+            InactiveSections: defaultInactiveSections,
+            SelectedSection: {
+                slug: '',
+                name: '',
+                markdown: '',
+            },
+        });
+        persist.clearStorage(); // This will clear the local storage
+    },    
 });
 
-export const useStore = create(store);
+export const useStore = create(
+    persist(store, {
+        name: 'Readme-Store', // unique name for the localStorage key
+    })
+);

@@ -31,28 +31,29 @@ const MarkdownEditor = () => {
   return (
     <div className="grid grid-rows-[20px_auto] h-full">
       <div className="p-1 text-zinc-700 font-semibold px-3">Editor</div>
-      {SelectedSection.slug !== ''
-      ?
-      <Editor
-        className="m-2 max-w-full h-[630px]"
-        theme="myCustomTheme" // Apply the custom theme
-        language="markdown"
-        defaultValue=""
-        value={SelectedSection.markdown}
-        onChange={(value) => SetSelectedSection(SelectedSection.slug, value)}
-        beforeMount={handleEditorWillMount}
-        onMount={handleEditorDidMount}
-        options={{
-          glyphMargin: false,
-          lineNumbers: 'off',
-          minimap: {
-            enabled: false
-          },
-        }}
-      />
-      :
-      <></>
-      }
+      <div className="m-2 max-w-full h-[630px] flex items-center justify-center">
+        {SelectedSection.slug !== ''
+        ?
+        <Editor
+          theme="myCustomTheme" // Apply the custom theme
+          language="markdown"
+          defaultValue=""
+          value={SelectedSection.markdown}
+          onChange={(value) => SetSelectedSection(SelectedSection.slug, value)}
+          beforeMount={handleEditorWillMount}
+          onMount={handleEditorDidMount}
+          options={{
+            glyphMargin: false,
+            lineNumbers: 'off',
+            minimap: {
+              enabled: false
+            },
+          }}
+        />
+        :
+        <div className="text-zinc-700 font-semibold">Select a section from the left sidebar to edit the contents</div>
+        }
+      </div>
     </div>
   );
 };
