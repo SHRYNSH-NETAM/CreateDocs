@@ -5,3 +5,25 @@
 html {
 color-scheme: dark;
 }
+
+/* For webkit browsers (Chrome, Safari, Edge) */
+.scrollbar-custom::-webkit-scrollbar {
+width: 15px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+background: #27272a; /* Light background color */
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+background-color: #6b7280; /* Darker color for scrollbar */
+border-radius: 10px;
+border: 2px solid #e5e7eb; /* Match the background color to create padding effect */
+}
+
+/* For Firefox */
+.scrollbar-custom {
+scrollbar-color: #71717a #e5e7eb; /* Thumb color, Track color */
+scrollbar-width: thin;
+}
+  
