@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist,devtools } from 'zustand/middleware';
 import { defaultActiveSections, defaultInactiveSections } from './components/defaultSections';
 
 const store = (set) => ({
@@ -25,7 +25,7 @@ const store = (set) => ({
     
             // If the section is not found, return the current state without changes
             return state;
-    }),
+    },false,"moveToActive"),
 
     MovetoInactive: (slug) =>
         set((state) => {
@@ -45,7 +45,7 @@ const store = (set) => ({
     
             // If the section is not found, return the current state without changes
             return state;
-    }),
+    },false,"moveToInactive"),
 
     addNewSection: (slug, name) =>
         set((store) => ({
@@ -57,7 +57,7 @@ const store = (set) => ({
                 markdown: '',
                 },
             ],
-    })),
+    }),false,"addNewSection"),
 
     SelectedSection:{
         slug: '',
@@ -65,7 +65,7 @@ const store = (set) => ({
         markdown: ``,
     },
 
-    toggleSelectedSelection: (slug) =>
+    toggleSelectedSection: (slug) =>
         set((state) => {
             if(slug === '') {
                 return { 
@@ -80,7 +80,7 @@ const store = (set) => ({
             return foundSection
                 ? { SelectedSection: { ...foundSection } }
                 : state.SelectedSection; // No change if slug not found
-    }),
+    },false,"toggleSelectedSection"),
 
     SetSelectedSection: (slug, newMarkdown) =>
         set((state) => {
@@ -96,7 +96,7 @@ const store = (set) => ({
                 ActiveSections: updatedSections, // Update the Sections array
                 SelectedSection: { ...updatedSelectedSection }, // Update the SelectedSection with new markdown
             };
-    }),
+    },false),
 
     ResetSelectedSection: (slug, name) =>
         set((state) => {
@@ -129,7 +129,7 @@ const store = (set) => ({
                 ActiveSections: updatedActiveSections, // Step 6: Update the ActiveSections array with the resetSection
                 SelectedSection: resetSection, // Step 7: Update SelectedSection with the resetSection
             };
-    }),
+    },false,"resetSelectedSection"),
     
     resetStore: () => {
         set({
@@ -140,13 +140,13 @@ const store = (set) => ({
                 name: '',
                 markdown: '',
             },
-        });
+        },false,"resetStore");
         persist.clearStorage(); // This will clear the local storage
     },    
 });
 
 export const useStore = create(
-    persist(store, {
+    persist(devtools(store), {
         name: 'Readme-Store', // unique name for the localStorage key
     })
 );

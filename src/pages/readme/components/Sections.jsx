@@ -48,7 +48,7 @@ const Sections = () => {
   );
 
   const toggleSelectedSection = useStore(
-    (state) => state.toggleSelectedSelection
+    (state) => state.toggleSelectedSection
   );
 
   const resetSelectedSection = useStore(
@@ -100,7 +100,7 @@ const Sections = () => {
           </div>
         </div>
 
-        <div className="m-2 border rounded-md border-zinc-500 flex flex-col h-[630px] overflow-auto scrollbar-custom">
+        <div className="m-2 border rounded-md border-zinc-500 flex flex-col max-h-full overflow-auto scrollbar-custom">
           <div className="relative flex flex-col bg-zinc-100 rounded-t-md">
             <p className="text-xs p-1 flex w-full items-center text-zinc-900 justify-center">
               Click on a section below to edit the contents
@@ -176,7 +176,8 @@ const Sections = () => {
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 <div className="relative p-6 flex flex-col gap-3 items-center justify-center">
                   <p className="text-zinc-800 font-semibold text-xl">New Custom Section</p>
-                  <input type="text" id="first_name" 
+                  <input type="text" id="first_name"
+                      onSubmit={handleAddSection}
                       onChange={(e) => setInputSection(e.target.value)}
                       className="w-[450px] bg-zinc-100 border border-zinc-800 text-zinc-800 text-md rounded-md p-2.5" placeholder="Section Title" autoComplete="off" required />
                   <div className="w-full flex gap-5">
