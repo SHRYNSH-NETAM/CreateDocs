@@ -58,7 +58,7 @@ const Preview = () => {
         }
         {
           output == "Preview"
-          ? <div className="prose font-sans flex flex-nowrap">
+          ? <div className="prose font-sans">
               <div className="overflow-x-auto inline" dangerouslySetInnerHTML={{ __html: parsed }} />
             </div>
           : <pre className="whitespace-pre-wrap text-zinc-700 text-wrap">{combinedMarkdown}</pre>
