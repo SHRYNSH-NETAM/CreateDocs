@@ -1,5 +1,5 @@
 import { marked } from 'marked';
-import React, { useEffect,useMemo, useState } from 'react';
+import { useEffect,useMemo, useState } from 'react';
 import dompurify from 'dompurify';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/tokyo-night-dark.css';
@@ -14,8 +14,6 @@ const Preview = () => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(combinedMarkdown);
-    setIsClicked(true);
-    setTimeout(() => setIsClicked(false), 2000); // Reset after 2 seconds
   };
 
   // Combine markdown from all active sections

@@ -1,4 +1,4 @@
-import { React,useState,useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import { useStore } from '../store';
 
 const Sections = () => {
@@ -76,7 +76,7 @@ const Sections = () => {
     } else {
         toggleSelectedSection('');
     }
-  }, []);
+  }, [toggleSelectedSection]);
 
   return (
     <>
