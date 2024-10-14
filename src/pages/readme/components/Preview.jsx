@@ -40,13 +40,14 @@ const Preview = () => {
   }, [combinedMarkdown]);
 
   return (
-    <div className="grid grid-rows-[20px_auto] h-full">
-      <div className="p-1 px-3 text-zinc-600 font-medium flex gap-4">
+    <div className="basis-full flex flex-col max-w-[600px]">
+      <div className="flex-none h-[20px] p-1 px-3 text-zinc-600 font-medium flex gap-4">
         <p role="button" className={`${output=="Preview" ? 'text-black font-bold' : ''}`} onClick={()=>{setOutput("Preview")}}>Preview</p>
         <p role="button" className={`${output=="Raw" ? 'text-black font-bold' : ''}`} onClick={()=>{setOutput("Raw")}}>Raw</p>
       </div>
-      <div className="bg-zinc-100 m-2 p-3 border rounded-md border-gray-900 overflow-auto max-h-[630px] max-w-full scrollbar-custom flex flex-col relative">
-        {
+      <div className="flex-1 bg-zinc-100 m-2 p-3 border rounded-md border-gray-900 overflow-y-auto scrollbar-custom flex flex-col relative">
+        <div className="h-[0px] overflow-visible flex flex-col relative">
+          {
           output == "Preview"
           ? null
           : <div>
@@ -59,13 +60,15 @@ const Preview = () => {
         }
         {
           output == "Preview"
-          ? <div className="prose font-sans">
-              <div className="overflow-x-auto" dangerouslySetInnerHTML={{ __html: parsed }} />
+          ? <div className="prose font-sans flex flex-nowrap">
+              <div className="overflow-x-auto inline" dangerouslySetInnerHTML={{ __html: parsed }} />
             </div>
-          : <pre className="whitespace-pre-wrap text-zinc-700">{combinedMarkdown}</pre>
+          : <pre className="whitespace-pre-wrap text-zinc-700 text-wrap">{combinedMarkdown}</pre>
         }
+        </div>
       </div>
     </div>
+    // <div  className="basis-full bg-yellow-200"></div>
   );
 };
 

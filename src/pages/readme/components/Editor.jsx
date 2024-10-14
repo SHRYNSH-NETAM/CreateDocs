@@ -29,9 +29,9 @@ const MarkdownEditor = () => {
   };
 
   return (
-    <div className="grid grid-rows-[20px_auto] h-full">
-      <div className="p-1 text-zinc-700 font-semibold px-3">Editor</div>
-      <div className="m-2 max-w-full max-h-full flex items-center justify-center border border-zinc-800">
+    <div className="basis-full flex flex-col">
+      <div className="flex-none h-[20px] p-1 text-zinc-700 font-semibold px-3">Editor</div>
+      <div className="flex-1 m-2 flex items-center justify-center border border-zinc-800">
         {SelectedSection.slug !== ''
         ?
         <Editor
@@ -55,6 +55,7 @@ const MarkdownEditor = () => {
         }
       </div>
     </div>
+    // <div className="basis-full bg-pink-200"></div>
   );
 };
 

@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-color-scheme: dark;
-}
 
 /* For webkit browsers (Chrome, Safari, Edge) */
 .scrollbar-custom::-webkit-scrollbar {

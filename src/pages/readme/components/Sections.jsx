@@ -80,8 +80,8 @@ const Sections = () => {
 
   return (
     <>
-      <div className="grid grid-cols-[15%_auto] sm:grid-cols-[8%_auto] xl:grid-rows-[20px_auto] xl:grid-cols-none">
-        <div className="p-1 px-3 flex justify-between text-zinc-700 font-semibold">
+      <div className="basis-1/2 flex flex-col">
+        <div className="flex-none h-[20px] p-1 px-3 flex justify-between text-zinc-700 font-semibold">
           <div>Sections</div>
           <div className="flex justify-center" role="button" onClick={handleReset}>
             <svg
@@ -100,7 +100,7 @@ const Sections = () => {
           </div>
         </div>
 
-        <div className="m-2 border rounded-md border-zinc-500 flex flex-col max-h-full overflow-auto scrollbar-custom">
+        <div className="flex-1 m-2 border rounded-md border-zinc-500 flex flex-col overflow-auto scrollbar-custom">
           <div className="relative flex flex-col bg-zinc-100 rounded-t-md">
             <p className="text-xs p-1 flex w-full items-center text-zinc-900 justify-center">
               Click on a section below to edit the contents
@@ -196,6 +196,7 @@ const Sections = () => {
         </>
       ) : null}
     </>
+    // <div className="basis-1/2 bg-purple-200"></div>
   );
 };
 
