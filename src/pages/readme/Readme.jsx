@@ -40,7 +40,7 @@ const Readme = () => {
       {/* Footer */}
       <div className="bg-zinc-100 text-xs text-zinc-800 pb-1 flex gap-1 items-center justify-center">
         <div className="flex justify-center items-center">Made with 🔥 by Shreyansh Netam | View the Source Code on</div>
-        <a href="https://github.com/SHRYNSH-NETAM" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Github</a>
+        <a href="https://github.com/SHRYNSH-NETAM" target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Github</a>
       </div>
     </div>
   );
